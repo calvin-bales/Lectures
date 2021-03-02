@@ -9,14 +9,14 @@ class LogisticMap(object):
         self.mu = mu
         self.muList = [mu]
 
-    def map_generator(self):
+    def map_generator(self): #does the same things as iterate
         while True:
             yield self.x
             self.x = self.mu*self.x*(1.0-self.x)
 
     def iterate_gen(self, number=1000):
         count = 0
-        for r in  self.map_generator():
+        for r in  self.map_generator(): #counter is because otherwise it would go on forever
             if count>number:
                 break
             self.xList.append(r)
@@ -24,16 +24,16 @@ class LogisticMap(object):
             count+=1
 
 
-    def map(self):
+    def map(self): 
         self.x = self.mu * self.x * (1.0 - self.x)
-        self.xList.append(self.x)
+        self.xList.append(round(self.x,5))
         self.muList.append(self.mu)
 
     def clear(self):
         self.xList = []
         self.muList = []
         
-    def iterate(self, number=1000):
+    def iterate(self, number=1000): #applies map function many times
         for i in range(number): self.map()
                     
     def initialize(self, transient):
@@ -51,13 +51,14 @@ class LogisticMap(object):
             lam += np.log(self.mu * abs(1.0 - 2.0 * x))
         
         return lam / len(xList_new)
+    
 
-class LogisticMap_iter():
+class LogisticMap_iter(): #making class an interator (or maybe vise versa?) --next and iter are for that
     def __init__(self, x=0.5, mu=3.2):
         self.x = x
         self.mu = mu
 
-    def __next__(self):
+    def __next__(self): 
         return_value = self.x
         self.x =  3.2*self.x*(1.0-self.x)
         return return_value

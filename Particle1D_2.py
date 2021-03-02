@@ -234,6 +234,7 @@ class Pendulum(Particle):
             self.x += 2*np.pi
 
     # overload method to wrap x between [-pi,pi]
+
     def scipy_trajectory(self):
         Particle.scipy_trajectory(self)
         
@@ -263,5 +264,43 @@ class Pendulum(Particle):
         F = self.Fd*np.cos(self.omega_d*t) - self.nu*v - g/self.l*np.sin(x)
         
         return F
+#####################################################################################################################
+#################################### Parts below are what I added for homework 2 #################################### 
+#####################################################################################################################
+    def scipy_lyaponov(self):
+        Particle.scipy_trajectory(self)
+        
+        x = self.xv[:,0]
+        x_new = np.zeros(np.shape(x))
+        x_new[0] = x[0]
 
+        # find change in x between each point
+        dx = np.diff(x)
+        nx = np.shape(x)[0]
+        
+        for ii in range(1,nx):
+            # reconstruct x array, checking for out of range values
+            x_new[ii] = x_new[ii-1]+dx[ii-1]
+        
+        self.xv_unwrap = copy(self.xv)
+        self.xv[:,0] = x_new
+            
+    def poincare(self):
+        n=2
+        i=0
+        pc_x = []
+        pc_v = []
+        pc_t = []
+        for t in self.tarray:
+            if abs(t-2*np.pi*n/self.omega_d)<self.dt/2:
+                pc_x.append(self.xv[i,0])
+                pc_v.append(self.xv[i,1])
+                pc_t.append(t)
+                n+=1
+            i+=1
+        self.pc_x = np.array(pc_x)
+        self.pc_v = np.array(pc_v)
+        self.pc_t = np.array(pc_t)
+    
+ 
             

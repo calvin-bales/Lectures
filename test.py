@@ -1,4 +1,4 @@
-import timeit
+import timeit #test which one is most effective
 import sys
 import LogisticMap as lm
 
@@ -20,9 +20,9 @@ total_time = stop - start
 # output running time in a nice format.
 sys.stdout.write("generator: {} s \n".format(total_time))
 
-start = timeit.default_timer()
+start = timeit.default_timer() #iterator class is most effective
 li = lm.LogisticMap_iter()
-l = [next(li) for i in range(5000000)]
+l = [next(li) for i in range(5000000)] #next(li) gets value
 stop = timeit.default_timer()
 total_time = stop - start
 
